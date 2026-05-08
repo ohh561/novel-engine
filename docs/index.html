@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novel Engine — 长篇小说写作引擎</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+        .hero {
+            text-align: center;
+            padding: 100px 0 60px;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+        }
+        .hero h1 {
+            font-size: 3.2em;
+            background: linear-gradient(135deg, #58a6ff, #bc8cff, #f778ba);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        .hero p {
+            font-size: 1.3em;
+            color: #8b949e;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #238636; color: #fff; }
+        .btn-primary:hover { background: #2ea043; }
+        .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+        .btn-secondary:hover { background: #30363d; }
+        .features { padding: 80px 0; }
+        .features h2 { text-align: center; font-size: 2em; margin-bottom: 48px; color: #f0f6fc; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .feature-card {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 28px;
+            transition: all 0.2s;
+        }
+        .feature-card:hover { border-color: #30363d; transform: translateY(-2px); }
+        .feature-icon { font-size: 2em; margin-bottom: 12px; }
+        .feature-card h3 { color: #f0f6fc; margin-bottom: 8px; font-size: 1.2em; }
+        .feature-card p { color: #8b949e; font-size: 0.95em; }
+        .architecture { padding: 80px 0; background: #161b22; }
+        .architecture h2 { text-align: center; font-size: 2em; margin-bottom: 48px; color: #f0f6fc; }
+        .arch-diagram {
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 32px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+            overflow-x: auto;
+            white-space: pre;
+            color: #58a6ff;
+        }
+        .stats { padding: 60px 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; text-align: center; }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #58a6ff, #bc8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label { color: #8b949e; margin-top: 4px; }
+        .workflow { padding: 80px 0; background: #161b22; }
+        .workflow h2 { text-align: center; font-size: 2em; margin-bottom: 48px; color: #f0f6fc; }
+        .steps { max-width: 600px; margin: 0 auto; }
+        .step { display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: #238636;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+        .step-content h4 { color: #f0f6fc; margin-bottom: 4px; }
+        .step-content p { color: #8b949e; font-size: 0.95em; }
+        .cta { padding: 80px 0; text-align: center; }
+        .cta h2 { font-size: 2em; margin-bottom: 16px; color: #f0f6fc; }
+        .cta p { color: #8b949e; margin-bottom: 32px; font-size: 1.1em; }
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: #484f58;
+            font-size: 0.9em;
+            border-top: 1px solid #21262d;
+        }
+        footer a { color: #58a6ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="container">
+        <h1>🖊️ Novel Engine</h1>
+        <p>一个完整的长篇小说写作引擎，可以独立驱动一部 500+ 章的长篇小说。</p>
+        <div class="hero-buttons">
+            <a href="https://github.com/ohh561/novel-engine" class="btn btn-primary">⭐ GitHub</a>
+            <a href="https://github.com/ohh561/novel-engine/blob/master/writing/tutorial.md" class="btn btn-secondary">📖 从零教程</a>
+            <a href="https://github.com/ohh561/novel-engine/tree/master/template" class="btn btn-secondary">📦 冷启动模板</a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2>核心特性</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏗️</div>
+                <h3>四层金字塔情节系统</h3>
+                <p>世界观→卷大纲→幕大纲→情节节拍，层层驱动。情节优先，章节为切分单位。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>三级伏笔系统</h3>
+                <p>全书级/卷级/章节级伏笔，自动追踪埋入和回收。数百章伏笔不断线。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👤</div>
+                <h3>角色成长系统</h3>
+                <p>性格维度、技能树、携带物品、关系矩阵。角色随剧情演变，关系自动同步。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>读者旅程追踪</h3>
+                <p>情绪曲线、子线监控、节奏热力图。确保不出现连续平淡或连续紧张。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>主线监控</h3>
+                <p>自动追踪主线进展，偏离/拖沓/断线预警。数百章不迷路。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>自审系统</h3>
+                <p>逻辑一致性、节奏、人物、去AI味。每章写完必须检查，发现问题立刻纠正。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>写作引擎</h3>
+                <p>模块协作、自动丰富、依赖检查、故障恢复。改了A自动检查B、C、D。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>冷启动模板</h3>
+                <p>新建小说时复制模板即可开始。最小启动只需填4个文件。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="architecture">
+    <div class="container">
+        <h2>引擎架构</h2>
+        <div class="arch-diagram">
+┌─────────────────────────────────────────────────┐
+│                  调度层                           │
+│  engine.md + naming.md + index.md + config.md   │
+└─────────┬───────────────────────────────┬───────┘
+          │                               │
+    ┌─────▼──────┐                 ┌──────▼──────┐
+    │  故事层     │                 │  写作层      │
+    │            │                 │             │
+    │ worldview   │                 │ guide       │
+    │ plot        │◄───────────────►│ critic      │
+    │ persistent  │    双向协作     │ update-list │
+    │ characters  │                 │ revision    │
+    │ reader-journey               │ quality     │
+    │ monitor     │                 │ tutorial    │
+    │ dashboard   │                 │             │
+    └────────────┘                 └─────────────┘
+          │
+    ┌─────▼──────┐
+    │  模板层     │
+    │ template/   │ ← 可复用，新建小说时复制
+    └────────────┘</div>
+    </div>
+</section>
+
+<section class="workflow">
+    <div class="container">
+        <h2>写作流程</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h4>生成上下文包</h4>
+                    <p>读取节拍、世界设定、持久化文件、写作指南</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h4>写正文</h4>
+                    <p>3000-5000字，按写作指南执行</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h4>自审</h4>
+                    <p>逻辑/节奏/人物/伏笔/去AI味检查，发现问题立刻纠正</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h4>更新文档</h4>
+                    <p>时间线→主角→角色→伏笔→索引→监控→读者→仪表盘</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                    <h4>主线监控</h4>
+                    <p>检查是否偏离主线，是否拖沓或赶进度</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">6</div>
+                <div class="step-content">
+                    <h4>读者旅程检查</h4>
+                    <p>子线是否断线，节奏是否失衡</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">7</div>
+                <div class="step-content">
+                    <h4>保存正文</h4>
+                    <p>输出到 chapters/volX-chXXX.md</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>开始你的长篇小说</h2>
+        <p>克隆模板，填入设定，开始写作。就这么简单。</p>
+        <a href="https://github.com/ohh561/novel-engine" class="btn btn-primary">🚀 Get Started</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>Built with ❤️ by <a href="https://github.com/ohh561">ohh561</a> · MIT License</p>
+    </div>
+</footer>
+
+</body>
+</html>

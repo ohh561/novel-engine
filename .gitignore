@@ -1,0 +1,25 @@
+# 废弃目录（保留于仓库但不在新系统中使用）
+bible/
+outline/
+characters/
+state/
+summary/
+writing-guide.md
+
+# 系统文件
+system.md
+
+# 临时文件
+*.bak
+*.tmp
+*.swp
+*~
+
+# OS文件
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.vscode/
+.idea/
+*.code-workspace
