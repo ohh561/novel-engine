@@ -19,6 +19,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
+from engine.agent_callers import _call_llm, _parse_json_response
 from engine.state_manager import (
     load_characters, load_plot_timeline, load_world_lore,
     save_json, load_json,
@@ -536,6 +537,233 @@ def generate_volume(volume_outline: str, volume_number: int = 1) -> None:
 
 
 # ---------------------------------------------------------------------------
+# World-Builder Agent：跨卷世界观重置
+# ---------------------------------------------------------------------------
+
+WORLD_BUILDER_PROMPT = """你是一个跨卷世界观管理员。你将收到：
+1. 上一卷的 world_lore.json（当前状态）
+2. 上一卷的战斗结果摘要（从 combat_logs 提取）
+3. 新一卷的大纲
+
+你的任务：输出 world_lore.json 的更新指令。
+
+提取规则：
+
+1. earth_status_update：
+   - current_volume: 新卷号
+   - integrated_tech: 地球新获得的科技/能力列表
+   - military_strength: 军事力量描述
+   - special_capabilities: 新增特殊能力
+   - casualties_total: 累计伤亡
+   - global_mood: 全球情绪
+
+2. archive_realm：
+   - 将当前卷对手世界归档
+   - 包含：world_id, world_name, world_type, outcome, battle_summary,
+     territory_gained, tech_acquired, key_events, unresolved_threads
+
+3. new_active_realm：
+   - 从新卷大纲提取新对手世界设定
+   - 最关键：current_power_dynamic
+     - summary: 一句话战力对比
+     - earth_advantage: 地球优势列表
+     - enemy_advantage: 敌方优势列表
+     - balance: earth_dominant / earth_slight_advantage / balanced / enemy_slight_advantage / enemy_dominant
+     - risk_factor: 最大风险
+   - key_threats: 主要威胁列表（name, level, note）
+
+输出严格 JSON 格式：
+{
+  "earth_status_update": { ... },
+  "archive_realm": { ... },
+  "new_active_realm": { ... }
+}"""
+
+
+def call_world_builder(
+    current_lore: dict,
+    combat_summary: str,
+    new_volume_outline: str,
+) -> dict:
+    """
+    调用 World-Builder Agent 生成跨卷世界观更新指令。
+
+    参数:
+        current_lore: 当前 world_lore.json 数据
+        combat_summary: 上一卷战斗结果摘要
+        new_volume_outline: 新一卷大纲文本
+
+    返回:
+        更新指令 dict
+    """
+    user_prompt = (
+        f"## 当前 world_lore.json\n\n{json.dumps(current_lore, ensure_ascii=False, indent=2)}\n\n"
+        f"## 上一卷战斗结果\n\n{combat_summary}\n\n"
+        f"## 新一卷大纲\n\n{new_volume_outline}"
+    )
+
+    print("  [world_builder] 生成跨卷更新...")
+    raw = _call_llm(
+        system_prompt=WORLD_BUILDER_PROMPT,
+        user_prompt=user_prompt,
+        temperature=0.5,
+        max_tokens=6000,
+        json_mode=True,
+    )
+
+    try:
+        data = _parse_json_response(raw)
+    except ValueError:
+        print("  [world_builder] ⚠️ JSON 解析失败，重试...")
+        raw = _call_llm(
+            system_prompt=WORLD_BUILDER_PROMPT + "\n\n请务必输出合法 JSON。",
+            user_prompt=user_prompt,
+            temperature=0.3,
+            max_tokens=6000,
+            json_mode=False,
+        )
+        data = _parse_json_response(raw)
+
+    print("  [world_builder] 完成")
+    return data
+
+
+def apply_volume_transition(transition_data: dict) -> None:
+    """
+    将 World-Builder 的输出应用到 world_lore.json。
+
+    参数:
+        transition_data: call_world_builder 的输出
+    """
+    from engine.state_manager import load_world_lore, save_world_lore
+
+    lore = load_world_lore()
+
+    # 1. 更新 earth_status
+    earth_update = transition_data.get("earth_status_update", {})
+    if earth_update:
+        earth = lore.get("earth_status", {})
+        for key, value in earth_update.items():
+            earth[key] = value
+        lore["earth_status"] = earth
+
+    # 2. 归档当前对手世界
+    archive = transition_data.get("archive_realm", {})
+    if archive:
+        archived = lore.get("archived_realms", {"realms": []})
+        archived["realms"].append(archive)
+        lore["archived_realms"] = archived
+
+    # 3. 重置 active_realm
+    new_realm = transition_data.get("new_active_realm", {})
+    if new_realm:
+        lore["active_realm"] = new_realm
+
+    # 更新时间戳
+    lore.setdefault("_meta", {})["last_updated"] = time.strftime("%Y-%m-%d")
+
+    save_world_lore(lore)
+    print("  [world_builder] world_lore.json 已更新")
+
+
+def build_transition_context(current_volume: int, new_volume_outline: str) -> str:
+    """
+    构建 World-Builder 的输入上下文。
+
+    参数:
+        current_volume: 当前卷号
+        new_volume_outline: 新一卷大纲
+
+    返回:
+        combat_summary 文本
+    """
+    from engine.state_manager import load_world_lore, load_plot_timeline
+
+    lore = load_world_lore()
+    timeline = load_plot_timeline()
+
+    # 提取战斗日志摘要
+    combat_logs = timeline.get("combat_logs", [])
+    if combat_logs:
+        combat_lines = []
+        for log in combat_logs[-5:]:  # 最近5次战斗
+            engagement = log.get("engagement", "?")
+            outcome = log.get("outcome", "?")
+            combat_lines.append(f"- {engagement}: {outcome}")
+        combat_summary = "最近战斗：\n" + "\n".join(combat_lines)
+    else:
+        combat_summary = "（无战斗记录）"
+
+    return combat_summary
+
+
+def transition_to_next_volume(
+    current_volume: int,
+    new_volume_outline: str,
+    new_volume_number: int,
+) -> None:
+    """
+    跨卷世界观重置协议。
+
+    流程：
+      1. 读取上一卷的 world_lore.json 和战斗结果
+      2. 调用 World-Builder Agent 生成更新指令
+      3. 应用更新：归档旧世界、提取新世界、重置战力对比
+      4. 重置 volume_plan.json 和 plot_timeline.json
+
+    参数:
+        current_volume: 当前（刚结束的）卷号
+        new_volume_outline: 新一卷大纲文本
+        new_volume_number: 新卷号
+    """
+    from engine.state_manager import load_world_lore
+
+    print(f"\n{'='*60}")
+    print(f"🔄 跨卷世界观重置：第 {current_volume} 卷 → 第 {new_volume_number} 卷")
+    print(f"{'='*60}")
+
+    # Step 1: 读取当前状态
+    print("\n[Step 1/4] 读取当前世界状态...")
+    lore = load_world_lore()
+    combat_summary = build_transition_context(current_volume, new_volume_outline)
+    print(f"  当前对手: {lore.get('active_realm', {}).get('world_name', '?')}")
+    print(f"  战斗记录: {len(lore.get('archived_realms', {}).get('realms', []))} 个已归档")
+
+    # Step 2: 调用 World-Builder
+    print("\n[Step 2/4] 调用 World-Builder Agent...")
+    transition_data = call_world_builder(lore, combat_summary, new_volume_outline)
+
+    # Step 3: 应用更新
+    print("\n[Step 3/4] 应用世界观更新...")
+    apply_volume_transition(transition_data)
+
+    # Step 4: 重置卷级状态
+    print("\n[Step 4/4] 重置卷级状态...")
+    plan = load_volume_plan()
+    plan["current_volume"] = new_volume_number
+    plan["volumes"][str(new_volume_number)] = {
+        "volume_title": f"第{new_volume_number}卷",
+        "total_chapters_estimate": 0,
+        "nodes": [],
+    }
+    save_volume_plan(plan)
+
+    # 打印摘要
+    new_realm = transition_data.get("new_active_realm", {})
+    power = new_realm.get("current_power_dynamic", {})
+    print(f"\n{'─'*60}")
+    print(f"新对手: {new_realm.get('world_name', '?')} ({new_realm.get('world_type', '?')})")
+    print(f"战力对比: {power.get('balance', '?')}")
+    print(f"摘要: {power.get('summary', '?')}")
+    print(f"地球优势: {', '.join(power.get('earth_advantage', []))}")
+    print(f"敌方优势: {', '.join(power.get('enemy_advantage', []))}")
+    print(f"风险: {power.get('risk_factor', '?')}")
+    print(f"{'─'*60}")
+
+    print(f"\n✅ 第 {new_volume_number} 卷世界观重置完成\n")
+
+
+# ---------------------------------------------------------------------------
 # CLI 入口
 # ---------------------------------------------------------------------------
 
@@ -558,6 +786,12 @@ def main():
     gen_parser = subparsers.add_parser("generate-volume", help="生成整卷")
     gen_parser.add_argument("--volume", type=int, default=1, help="卷号")
     gen_parser.add_argument("--outline", type=str, required=True, help="卷大纲文本或文件路径")
+
+    # transition-volume: 跨卷世界观重置
+    trans_parser = subparsers.add_parser("transition-volume", help="跨卷世界观重置")
+    trans_parser.add_argument("--current-volume", type=int, required=True, help="当前卷号")
+    trans_parser.add_argument("--new-volume", type=int, required=True, help="新卷号")
+    trans_parser.add_argument("--new-outline", type=str, required=True, help="新卷大纲文本或文件路径")
 
     # status: 查看当前计划状态
     subparsers.add_parser("status", help="查看当前卷计划状态")
@@ -587,6 +821,12 @@ def main():
         if Path(outline).exists():
             outline = Path(outline).read_text(encoding="utf-8")
         generate_volume(outline, args.volume)
+
+    elif args.command == "transition-volume":
+        outline = args.new_outline
+        if Path(outline).exists():
+            outline = Path(outline).read_text(encoding="utf-8")
+        transition_to_next_volume(args.current_volume, outline, args.new_volume)
 
     elif args.command == "status":
         plan = load_volume_plan()

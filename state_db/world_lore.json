@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "1.0",
-    "description": "静态世界观规则。极少变动。从 worldview/master.md 和 bible/ 提取。",
+    "version": "2.0",
+    "description": "静态世界观规则 + 动态战力对比。Volume Transition Protocol 每卷更新。",
     "last_updated": "2026-05-09"
   },
   "setting": {
@@ -16,29 +16,78 @@
       "physical": "不可穿透（飞船、导弹、无人机全部弹回）",
       "signal": "与人类DNA回响序列共振",
       "match_count": 1,
-      "top_match": { "name": "林晨", "match_rate": 1.0 },
+      "top_match": {
+        "name": "陆辞",
+        "match_rate": 1.0
+      },
       "second_match_rate": 0.23
     },
     "dissolution_phases": [
-      { "phase": "完整期", "duration_months": "1-3", "feature": "仅信号匹配者可穿越" },
-      { "phase": "裂缝期", "duration_months": "3-6", "feature": "小型载具可通过" },
-      { "phase": "大面积溶解期", "duration_months": "6-12", "feature": "可运送百人级兵力" },
-      { "phase": "完全消失", "duration_months": "12+", "feature": "自由通行" }
+      {
+        "phase": "完整期",
+        "duration_months": "1-3",
+        "feature": "仅信号匹配者可穿越"
+      },
+      {
+        "phase": "裂缝期",
+        "duration_months": "3-6",
+        "feature": "小型载具可通过"
+      },
+      {
+        "phase": "大面积溶解期",
+        "duration_months": "6-12",
+        "feature": "可运送百人级兵力"
+      },
+      {
+        "phase": "完全消失",
+        "duration_months": "12+",
+        "feature": "自由通行"
+      }
     ]
   },
-  "dome_base": {
-    "name": "穹顶",
-    "leader": "联合国主导",
-    "chinese_commander": "陈卫国",
-    "location": "中国西部山区",
-    "personnel": "200+人，来自30+国家"
+  "earth_status": {
+    "description": "地球当前综合实力。每卷结束后由 transition_to_next_volume 更新。",
+    "current_volume": 1,
+    "integrated_tech": [],
+    "military_strength": "常规军事力量",
+    "special_capabilities": [],
+    "alliances": [],
+    "casualties_total": 0,
+    "global_mood": "恐慌"
   },
-  "spaceship": {
-    "name": "曙光号",
-    "origin": "SpaceX星舰原型机改装",
-    "modifications": "加装信号共振器",
-    "capacity": "单人",
-    "launch_site": "酒泉/西昌"
+  "active_realm": {
+    "world_id": "aldor",
+    "world_name": "艾尔德",
+    "world_type": "魔法世界",
+    "power_level": "中世纪+魔法",
+    "current_power_dynamic": {
+      "summary": "地球科技 vs 魔法世界",
+      "balance": "earth_slight_advantage",
+      "earth_advantage": [
+        "远程火力",
+        "信息化"
+      ],
+      "enemy_advantage": [
+        "魔法未知性",
+        "龙族"
+      ],
+      "risk_factor": "龙族和精灵是未知变量"
+    },
+    "key_threats": [
+      {
+        "name": "骑士团",
+        "level": 4,
+        "note": ""
+      },
+      {
+        "name": "龙族",
+        "level": 7,
+        "note": ""
+      }
+    ]
+  },
+  "archived_realms": {
+    "realms": []
   },
   "observer": {
     "name": "观测者",
@@ -57,49 +106,18 @@
     "earth_to_alien_ratio": "1:0.8",
     "note": "异世界更慢。主角在异世界×1.25=地球过去时间"
   },
-  "worlds": [
-    {
-      "id": "earth",
-      "name": "地球",
-      "type": "科技文明",
-      "level": 1,
-      "status": "active"
-    },
-    {
-      "id": "aldor",
-      "name": "艾尔德",
-      "type": "魔法世界",
-      "level": "中世纪",
-      "features": ["魔法", "精灵", "龙族", "兽人"],
-      "status": "undiscovered"
-    },
-    {
-      "id": "ironhold",
-      "name": "铁堡",
-      "type": "蒸汽朋克",
-      "features": ["蒸汽机甲", "以太矿", "齿轮城堡"],
-      "status": "undiscovered"
-    },
-    {
-      "id": "psyra",
-      "name": "灵境",
-      "type": "灵能文明",
-      "features": ["精神力量", "灵能等级社会"],
-      "status": "undiscovered"
-    },
-    {
-      "id": "hive",
-      "name": "巢穴",
-      "type": "虫族",
-      "features": ["集体意识", "快速进化"],
-      "status": "undiscovered"
-    },
-    {
-      "id": "tianyuan",
-      "name": "天元",
-      "type": "修仙世界",
-      "features": ["灵气", "宗门制", "飞升"],
-      "status": "undiscovered"
-    }
-  ]
+  "dome_base": {
+    "name": "穹顶",
+    "leader": "联合国主导",
+    "chinese_commander": "陈卫国",
+    "location": "中国西部山区",
+    "personnel": "200+人，来自30+国家"
+  },
+  "spaceship": {
+    "name": "曙光号",
+    "origin": "SpaceX星舰原型机改装",
+    "modifications": "加装信号共振器",
+    "capacity": "单人",
+    "launch_site": "酒泉/西昌"
+  }
 }
