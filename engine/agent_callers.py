@@ -157,6 +157,7 @@ class CriticResult:
     passed: bool
     breakdown: dict
     strengths: list[str]
+    red_flags: list[str]
     weaknesses: list[str]
     actionable_feedback: list[str]
     ai_flags: list[str]
@@ -245,26 +246,35 @@ CRITIC_SYSTEM_PROMPT = """你是一个严苛的文学编辑。你将收到：
 
 你的任务：评估草稿质量，输出 JSON 格式的评审报告。
 
-评估维度（各 0-10 分）：
-- pacing（节奏）25%：有没有无聊的地方？节奏有没有变化？
-- dialogue（对话）20%：像人说话吗？有没有潜台词和废话？
-- character（角色一致性）25%：言行是否符合角色设定？有没有突然变蠢？
-- emotion（情感共鸣）20%：有没有"不该如此"的瞬间？情绪是通过行动展示的吗？
-- de_ai（去AI味）10%：有没有禁用词？句式有没有变化？有没有闲笔？
+评估维度（加权）：
+- friction（阻力与压迫感）30%：主角行动是否遭遇真实阻力？敌人是否像NPC？危机是否被轻易化解？
+- humanity（人味）20%：角色面临高压时是否有真实生理反应（心跳、手抖、口干、耳鸣）？主角是否像没有感情的机器人？
+- dialogue_tension（对话交锋感）20%：对话是否有潜台词和目的冲突？是否在互相试探？
+- pacing_visual（节奏与画面感）15%：有没有无聊的地方？句式变化？感官细节？
+- character_deai（角色一致性与去AI味）15%：角色言行是否一致？有没有禁用词？
 
-总分 = 各维度加权平均，四舍五入到整数。
+红线规则：
+- 如果危机被轻易化解或反派像送经验NPC，friction 直接 ≤6
+- 如果主角在危机中像机器人或通篇逻辑汇报，humanity 直接 ≤7
+- 如果对话一问一答毫无交锋，dialogue_tension 直接 ≤5
+- 有红线触发时，总分不超过6
+
+总分 = friction×0.30 + humanity×0.20 + dialogue_tension×0.20 + pacing_visual×0.15 + character_deai×0.15
+
+禁用词：仿佛、犹如、宛若、一丝、一抹、些许、几分、隐约、缓缓、不禁、微微、轻轻、淡淡、眼中闪过、嘴角勾起、眉头微皱、心中一动、心头一震、心中暗道、不由得、突然、瞬间、不由自主、终于明白了、一切都变了
 
 你必须严格输出以下 JSON 格式，不要输出任何其他内容：
 {
   "score": 7,
   "breakdown": {
-    "pacing": 7,
-    "dialogue": 6,
-    "character": 8,
-    "emotion": 7,
-    "de_ai": 7
+    "friction": 7,
+    "humanity": 7,
+    "dialogue_tension": 6,
+    "pacing_visual": 8,
+    "character_deai": 7
   },
   "strengths": ["具体优点1", "具体优点2"],
+  "red_flags": ["红线触发描述，无则留空数组"],
   "weaknesses": ["具体问题1", "具体问题2"],
   "actionable_feedback": ["具体修改建议1", "具体修改建议2"],
   "ai_flags": ["第N段'某个词' — 建议替换为xxx"]
@@ -316,6 +326,7 @@ def call_critic(outline: str, draft: str) -> CriticResult:
         passed=score >= 8,
         breakdown=data.get("breakdown", {}),
         strengths=data.get("strengths", []),
+        red_flags=data.get("red_flags", []),
         weaknesses=data.get("weaknesses", []),
         actionable_feedback=data.get("actionable_feedback", []),
         ai_flags=data.get("ai_flags", []),
