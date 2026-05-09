@@ -1,94 +1,79 @@
-# 🖊️ Novel Engine — 长篇小说写作引擎
+# 🖊️ Novel Engine — 长篇小说写作引擎 v5.0
 
-一个完整的长篇小说写作引擎，可以独立驱动一部 500+ 章的长篇小说。
+一个**动态、有状态、多 Agent** 的长篇小说写作系统。
 
 ## 这是什么？
 
-Novel Engine 是一套模块化的写作系统，帮你规划、写作、监控一部长篇小说。它不是 AI 写作工具，而是一个**结构化的故事管理系统**——管理世界观、情节、角色、伏笔、时间线，确保数百章下来逻辑一致、节奏合理、伏笔不断线。
+Novel Engine 是一套 AI 驱动的写作引擎，帮你规划、写作、监控一部长篇小说。
+
+**v5.0 核心变化**：从"全量注入"转向"动态查询"——不再每次把整本书塞进 prompt，而是通过结构化状态数据库 + RAG-lite 上下文组装，精准喂给写作 Agent。
 
 ## 核心特性
 
-- **情节节拍系统** — 世界观→卷大纲→幕大纲→情节节拍，最小叙事单元驱动
-- **伏笔追踪** — 在节拍中标注埋入/推进/回收，跨卷伏笔单独追踪
-- **角色档案** — 性格锚点、技能树、关系矩阵，随剧情演变
-- **故事状态** — 唯一需要维护的状态文件，2分钟更新，下次写直接读
-- **自审系统** — 去AI味、节奏检查、对话质量、情感共鸣
-- **写作指南** — 不是流程手册，是"怎么让故事好看"的手册
-- **冷启动模板** — 新建小说时复制模板即可开始
+- **三 Agent 循环** — Writer 写 → Critic 审 → Archivist 记，自动优化到合格
+- **动态上下文** — Context Builder 按需组装 ≤8k tokens 的精准上下文包
+- **结构化状态** — JSON 状态数据库，精确查询，不会越写越乱
+- **Token 节省 ~90%** — 从 ~100k 降到 ~8k 每章
+- **自审系统** — Critic Agent 自动评审，score < 8 自动返回修改
 
 ## 快速开始
-
-### 1. 克隆仓库
 
 ```bash
 git clone https://github.com/ohh561/novel-engine.git
 cd novel-engine
+cp -r template/ my-novel/
+cd my-novel/
 ```
 
-### 2. 了解目录结构
+## 目录结构
 
 ```
 novel-engine/
-├── system.md              ← 故事框架（情节节拍+章节切分+伏笔规则）
-├── engine.md              ← 引擎总纲（模块协作规则）
-├── config.md              ← 引擎配置
+├── engine.md              ← 总纲（架构说明）
+├── orchestration.md       ← 三Agent循环逻辑
+├── context_builder.md     ← 动态上下文组装器
+├── system.md              ← 故事框架（金字塔结构）
+├── config.md              ← 可调参数（token预算、Critic阈值等）
 ├── naming.md              ← 命名规范
-├── worldview/             ← 顶层世界观（每本小说不同）
-│   └── master.md          ← 世界观圣经
-├── plot/                  ← 情节系统（每本小说不同）
-│   └── vol{N}/
-│       ├── outline.md     ← 卷大纲
-│       ├── act{N}.md      ← 幕节拍
-│       └── world/         ← 该卷特有设定
-├── writing/               ← 写作技术层
-│   ├── guide.md           ← 写作指南（怎么去AI味、怎么写情感共鸣）
-│   ├── critic.md          ← 自审系统
+│
+├── state_db/              ← 状态数据库
+│   ├── world_lore.json    ← 静态世界观
+│   ├── characters.json    ← 动态角色注册表
+│   └── plot_timeline.json ← 滚动叙事记忆
+│
+├── agents/                ← Agent 系统提示
+│   ├── writer.md          ← Writer：写故事
+│   ├── critic.md          ← Critic：审故事
+│   └── archivist.md       ← Archivist：记状态
+│
+├── worldview/             ← 世界观设定
+├── writing/               ← 写作指南
+│   ├── guide.md           ← 怎么去AI味、怎么写情感共鸣
+│   ├── critic.md          ← 人工自审清单
 │   ├── tutorial.md        ← 从零教程
-│   └── annotated-example.md ← 带注释示例
-├── story-state.md         ← 故事状态（唯一需要维护的状态文件）
-├── characters/            ← 角色档案
-│   ├── protagonist.md     ← 主角档案
-│   └── cast.md            ← 角色索引
-├── chapters/              ← 正文
+│   └── annotated-example.md
 └── template/              ← 冷启动模板
 ```
 
-### 3. 开始写作
-
-```bash
-# 方式一：从模板新建
-cp -r template/ my-novel/
-cd my-novel/
-
-# 方式二：直接在本目录写
-# 填写 worldview/, plot/, characters/ 然后开始写
-```
-
-按 `writing/tutorial.md` 的教程开始。
-
-### 4. 写作流程
-
-每写一章的完整流程：
+## 写一章的流程
 
 ```
-1. 读 story-state.md — 知道"现在到哪了"
-2. 读最近 1 章原文 — 知道"上一章的调性和节奏"
-3. 看大纲节拍方向 — 知道"这章要推进什么"
-4. 写正文（3000-5000字）
-5. 自审（去AI味/节奏/对话/情感/闲笔）
-6. 更新 story-state.md
-7. 保存正文到 chapters/
+1. 读大纲 → 确定写哪章
+2. Context Builder → 组装 ≤8k 上下文包
+3. Writer → 生成初稿
+4. Critic → 评审 → score < 8? → Writer 修改 → 再评（最多3轮）
+5. score ≥ 8 → 定稿
+6. Archivist → 提取状态变更 → 更新 state_db
+7. 保存正文和摘要
 ```
 
 ## 系统版本
 
 | 版本 | 说明 |
 |------|------|
-| v1.0 | 基础框架（四层金字塔+伏笔+角色） |
-| v2.0 | 情节优先+灵活分幕+5卷迁移 |
-| v3.0 | 写作引擎（角色系统+读者旅程+主线监控） |
-| v3.1 | 系统优化（命名规范+防膨胀+仪表盘+索引+故障恢复） |
-| **v4.0** | **轻量化重构（砍掉冗余追踪，聚焦写作质量，情节节拍驱动）** |
+| v1.0-v3.1 | 传统框架（全量注入+手动追踪） |
+| v4.0 | 轻量化重构 |
+| **v5.0** | **动态有状态多Agent系统（state_db + 三Agent循环 + RAG-lite）** |
 
 ## 许可证
 

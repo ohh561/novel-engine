@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "滚动叙事记忆。Archivist 每章更新。global_synopsis 上限500字，recent_chapters 保留最近3章。",
+    "last_updated": "2026-05-09"
+  },
+  "global_synopsis": "2027年3月，天空出现异象——一个半透明球体包裹了地球和另一个星球。CERN破解信号后发现与人类DNA共振，全球筛查找到唯一100%匹配者：裸辞青年林晨。他被接到联合国穹顶基地训练两周后，乘坐改装星舰穿越屏障进入异世界。通讯中断，他独自降落在一个紫色森林中。",
+  "current_location": "艾尔德·紫色森林",
+  "current_chapter": 5,
+  "foreshadowing": [
+    {
+      "id": "F001",
+      "content": "3.7秒信号 + 7.83Hz舒曼共振 — 为什么嵌着地球特征？",
+      "planted_at": "ch001",
+      "status": "open"
+    },
+    {
+      "id": "F002",
+      "content": "回响序列为什么只匹配林晨（100% vs 第二名23%）",
+      "planted_at": "ch004",
+      "status": "open"
+    },
+    {
+      "id": "F003",
+      "content": "信号精度极高 — 像在'计时'",
+      "planted_at": "ch001",
+      "status": "open"
+    },
+    {
+      "id": "F004",
+      "content": "母亲的'注意安全'（全书限3次，已用1次）",
+      "planted_at": "ch004",
+      "status": "open"
+    }
+  ],
+  "recent_chapters": [
+    {
+      "chapter": 3,
+      "title": "穹顶",
+      "synopsis": "林晨被接到秘密基地穹顶，见到苏薇和陈卫国。得知自己100%匹配屏障信号，全球唯一。他问'能不能拒绝'。看到对面星球的卫星照片——有大陆、海洋、城市灯光。",
+      "key_events": ["到达穹顶", "得知100%匹配", "看到卫星照片"],
+      "characters_present": ["lin_chen", "su_wei", "chen_weiguo"]
+    },
+    {
+      "chapter": 4,
+      "title": "训练",
+      "synopsis": "两周速成训练：飞船操作、通讯设备、武器射击、野外生存、样本采集。老周负责安全部分，教他射击和生存。最后给母亲打电话，她说'注意安全'，他说'出差'。",
+      "key_events": ["两周训练", "老周登场", "给母亲打电话"],
+      "characters_present": ["lin_chen", "lao_zhou", "mother"]
+    },
+    {
+      "chapter": 5,
+      "title": "穿越",
+      "synopsis": "星舰发射，穿越屏障。失重、眩光、然后一片新天地。飞船降落在紫色森林中。通讯断了。两个太阳。紫色叶子会发光。四翼飞行生物掠过树梢。天黑了。林晨独自一人。",
+      "key_events": ["穿越屏障", "降落紫色森林", "通讯中断", "发现异世界生物"],
+      "characters_present": ["lin_chen"]
+    }
+  ],
+  "time_jumps": [
+    { "from": "ch001", "to": "ch002", "delta": "隔天" },
+    { "from": "ch002", "to": "ch003", "delta": "约一周（DNA筛查+等待通知）" },
+    { "from": "ch003", "to": "ch004", "delta": "第二天开始训练，跨2周" },
+    { "from": "ch004", "to": "ch005", "delta": "训练结束第二天发射" }
+  ]
+}

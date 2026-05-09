@@ -1,12 +1,11 @@
-# 废弃目录（保留于仓库但不在新系统中使用）
+# 小说内容（不在引擎仓库中）
 bible/
 outline/
 characters/
 state/
 summary/
-writing-guide.md
-
-# system.md is now a core file
+chapters/
+story-state.md
 
 # 临时文件
 *.bak

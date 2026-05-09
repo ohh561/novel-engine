@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "静态世界观规则。极少变动。从 worldview/master.md 和 bible/ 提取。",
+    "last_updated": "2026-05-09"
+  },
+  "setting": {
+    "start_date": "2027-03-15",
+    "perspective": "地球·中国",
+    "theme": "自由意志 vs 命运操控"
+  },
+  "barrier": {
+    "type": "球形能量场",
+    "properties": {
+      "transparency": "半透明，光可穿透，肉眼可见对面",
+      "physical": "不可穿透（飞船、导弹、无人机全部弹回）",
+      "signal": "与人类DNA回响序列共振",
+      "match_count": 1,
+      "top_match": { "name": "林晨", "match_rate": 1.0 },
+      "second_match_rate": 0.23
+    },
+    "dissolution_phases": [
+      { "phase": "完整期", "duration_months": "1-3", "feature": "仅信号匹配者可穿越" },
+      { "phase": "裂缝期", "duration_months": "3-6", "feature": "小型载具可通过" },
+      { "phase": "大面积溶解期", "duration_months": "6-12", "feature": "可运送百人级兵力" },
+      { "phase": "完全消失", "duration_months": "12+", "feature": "自由通行" }
+    ]
+  },
+  "dome_base": {
+    "name": "穹顶",
+    "leader": "联合国主导",
+    "chinese_commander": "陈卫国",
+    "location": "中国西部山区",
+    "personnel": "200+人，来自30+国家"
+  },
+  "spaceship": {
+    "name": "曙光号",
+    "origin": "SpaceX星舰原型机改装",
+    "modifications": "加装信号共振器",
+    "capacity": "单人",
+    "launch_site": "酒泉/西昌"
+  },
+  "observer": {
+    "name": "观测者",
+    "nature": "高等文明",
+    "motive": "宇宙级达尔文实验",
+    "rule": "不允许直接干预",
+    "scale": "同时管理数百个擂台"
+  },
+  "competition": {
+    "mechanism": "屏障出现→两世界接触→战争→败者大陆漂移",
+    "interval": "递减",
+    "rigged": true,
+    "note": "每轮对手恰好旗鼓相当（被安排的）"
+  },
+  "time_rules": {
+    "earth_to_alien_ratio": "1:0.8",
+    "note": "异世界更慢。主角在异世界×1.25=地球过去时间"
+  },
+  "worlds": [
+    {
+      "id": "earth",
+      "name": "地球",
+      "type": "科技文明",
+      "level": 1,
+      "status": "active"
+    },
+    {
+      "id": "aldor",
+      "name": "艾尔德",
+      "type": "魔法世界",
+      "level": "中世纪",
+      "features": ["魔法", "精灵", "龙族", "兽人"],
+      "status": "undiscovered"
+    },
+    {
+      "id": "ironhold",
+      "name": "铁堡",
+      "type": "蒸汽朋克",
+      "features": ["蒸汽机甲", "以太矿", "齿轮城堡"],
+      "status": "undiscovered"
+    },
+    {
+      "id": "psyra",
+      "name": "灵境",
+      "type": "灵能文明",
+      "features": ["精神力量", "灵能等级社会"],
+      "status": "undiscovered"
+    },
+    {
+      "id": "hive",
+      "name": "巢穴",
+      "type": "虫族",
+      "features": ["集体意识", "快速进化"],
+      "status": "undiscovered"
+    },
+    {
+      "id": "tianyuan",
+      "name": "天元",
+      "type": "修仙世界",
+      "features": ["灵气", "宗门制", "飞升"],
+      "status": "undiscovered"
+    }
+  ]
+}

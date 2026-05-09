@@ -1,0 +1,156 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "动态角色注册表。每章写完由 Archivist 更新。",
+    "last_updated": "2026-05-09",
+    "schema": {
+      "id": "唯一标识",
+      "name": "姓名",
+      "faction": "阵营",
+      "current_status": { "health", "location", "wealth", "equipment", "mood" },
+      "active_goals": ["当前目标"],
+      "relationships": { "char_id": { "type", "trust", "affinity", "note" } },
+      "hidden_secrets": ["读者不知道的信息"],
+      "last_appeared": "最后出场章节",
+      "arc_stage": "人物弧线阶段"
+    }
+  },
+  "characters": {
+    "lin_chen": {
+      "id": "lin_chen",
+      "name": "林晨",
+      "faction": "地球",
+      "role": "主角",
+      "current_status": {
+        "health": "良好",
+        "location": "艾尔德·紫色森林",
+        "wealth": "无",
+        "equipment": ["手枪+弹匣", "信号枪+3发", "三天压缩口粮", "手机(无信号)", "采样袋"],
+        "mood": "紧张但冷静",
+        "communication": "通讯中断"
+      },
+      "active_goals": [
+        "在异世界存活",
+        "收集情报",
+        "找到返回方法"
+      ],
+      "relationships": {
+        "mother": { "type": "母子", "trust": 7, "affinity": 6, "note": "疏远但牵挂，最后说了'注意安全'" },
+        "father": { "type": "父子", "trust": 5, "affinity": 4, "note": "三个月没说话，说了'去吧'" },
+        "chen_weiguo": { "type": "上下级", "trust": 6, "affinity": 4, "note": "穹顶指挥官" },
+        "su_wei": { "type": "科学顾问", "trust": 7, "affinity": 5, "note": "理性冷静" },
+        "lao_zhou": { "type": "教官", "trust": 6, "affinity": 4, "note": "'活着回来'" }
+      },
+      "hidden_secrets": [
+        "是穿越屏障的唯一人选",
+        "来自另一个星球（地球）",
+        "携带科技设备"
+      ],
+      "skills": {
+        "通信工程": "精通",
+        "编程": "精通",
+        "信号分析": "精通",
+        "飞船操作": "基础",
+        "手枪射击": "能打中靶子",
+        "野外生存": "基础"
+      },
+      "last_appeared": "ch005",
+      "arc_stage": "穿越异世界，等待探索"
+    },
+    "mother": {
+      "id": "mother",
+      "name": "林晨母亲",
+      "faction": "地球",
+      "role": "配角",
+      "current_status": {
+        "health": "良好",
+        "location": "中国老家",
+        "mood": "不知道儿子去了哪",
+        "wealth": "普通"
+      },
+      "active_goals": ["儿子平安"],
+      "relationships": {
+        "lin_chen": { "type": "母子", "trust": 7, "affinity": 6, "note": "不理解但爱" }
+      },
+      "hidden_secrets": [],
+      "last_appeared": "ch004",
+      "arc_stage": "日常"
+    },
+    "father": {
+      "id": "father",
+      "name": "林晨父亲",
+      "faction": "地球",
+      "role": "配角",
+      "current_status": {
+        "health": "良好",
+        "location": "中国老家",
+        "mood": "沉默",
+        "wealth": "普通工人"
+      },
+      "active_goals": [],
+      "relationships": {
+        "lin_chen": { "type": "父子", "trust": 5, "affinity": 4, "note": "沉默的对抗" }
+      },
+      "hidden_secrets": [],
+      "last_appeared": "ch004",
+      "arc_stage": "日常"
+    },
+    "chen_weiguo": {
+      "id": "chen_weiguo",
+      "name": "陈卫国",
+      "faction": "地球",
+      "role": "重要配角",
+      "current_status": {
+        "health": "良好",
+        "location": "穹顶基地",
+        "mood": "等待信号",
+        "wealth": "军方"
+      },
+      "active_goals": ["等待林晨返回", "管理穹顶项目"],
+      "relationships": {
+        "lin_chen": { "type": "上下级", "trust": 6, "affinity": 4, "note": "后期政治分歧" }
+      },
+      "hidden_secrets": [],
+      "last_appeared": "ch005",
+      "arc_stage": "日常"
+    },
+    "su_wei": {
+      "id": "su_wei",
+      "name": "苏薇",
+      "faction": "地球",
+      "role": "重要配角",
+      "current_status": {
+        "health": "良好",
+        "location": "穹顶基地",
+        "mood": "焦虑等待",
+        "wealth": "科研"
+      },
+      "active_goals": ["等待林晨信号", "分析屏障数据"],
+      "relationships": {
+        "lin_chen": { "type": "科学顾问", "trust": 7, "affinity": 5, "note": "理性vs感性" }
+      },
+      "hidden_secrets": [],
+      "last_appeared": "ch005",
+      "arc_stage": "日常"
+    },
+    "lao_zhou": {
+      "id": "lao_zhou",
+      "name": "老周",
+      "faction": "地球",
+      "role": "重要配角",
+      "current_status": {
+        "health": "良好",
+        "location": "穹顶基地",
+        "mood": "担心",
+        "wealth": "军方"
+      },
+      "active_goals": ["等林晨活着回来"],
+      "relationships": {
+        "lin_chen": { "type": "教官", "trust": 6, "affinity": 4, "note": "师徒→后期牺牲" }
+      },
+      "hidden_secrets": [],
+      "last_appeared": "ch004",
+      "arc_stage": "日常"
+    }
+  }
+}

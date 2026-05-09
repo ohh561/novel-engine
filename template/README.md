@@ -1,42 +1,60 @@
-# 写作引擎模板
+# 冷启动模板
 
-> 新建小说时，复制本目录到新项目，填入具体内容即可。
+> 新建小说时，复制整个 `template/` 目录。
 
-## 使用方法
+## 快速开始
 
 ```bash
-cp -r template/ my-new-novel/
-cd my-new-novel/
+cp -r template/ my-novel/
+cd my-novel/
 ```
 
-然后逐个文件填入你的小说设定。
+## 需要填写的文件
 
-## 文件清单
+### 必填
 
-| 文件 | 说明 | 需要填什么 |
-|------|------|-----------|
-| `engine.md` | 总纲 | 一般不需要改 |
-| `system.md` | 故事框架 | 一般不需要改 |
-| `config.md` | 可调参数 | 按需调整 |
-| `naming.md` | 命名规范 | 一般不需要改 |
-| `story-state.md` | 状态追踪 | 每章写完更新 |
-| `worldview/master.md` | 顶层世界观 | 填入你的世界观设定 |
-| `plot/vol1/outline.md` | 第一卷大纲 | 填入故事梗概 |
-| `plot/vol1/world/geography.md` | 世界地理 | 填入地理+文明 |
-| `plot/vol1/world/power.md` | 力量体系 | 填入力量等级表 |
-| `plot/vol1/act1.md` | 第一幕 | 填入情节节拍 |
-| `characters/protagonist.md` | 主角档案 | 填入主角设定 |
-| `characters/cast.md` | 角色库 | 填入角色设定 |
-| `writing/guide.md` | 写作指南 | 一般不需要改 |
-| `writing/critic.md` | 自审清单 | 一般不需要改 |
+1. `state_db/world_lore.json` — 世界观规则
+2. `state_db/characters.json` — 主要角色
+3. `state_db/plot_timeline.json` — 初始化为空故事
+4. `worldview/master.md` — 世界观圣经（参考，系统以 JSON 为准）
+5. `plot/vol1/outline.md` — 第一卷大纲
+6. `plot/vol1/act1.md` — 第一幕节拍
 
-## 最小启动
+### 可选
 
-最少只需要填：
+7. `characters/protagonist.md` — 主角详细档案（参考）
+8. `characters/cast.md` — 角色索引（参考）
 
-1. `worldview/master.md` — 世界观
-2. `plot/vol1/outline.md` — 第一卷大纲
-3. `plot/vol1/act1.md` — 第一幕节拍
-4. `characters/protagonist.md` — 主角
+## 不需要改动的文件
 
-其他文件可以边写边填。
+- `engine.md` — 引擎总纲
+- `orchestration.md` — 三Agent循环逻辑
+- `context_builder.md` — 上下文组装器
+- `agents/` — Agent 系统提示
+- `writing/` — 写作指南和自审清单
+- `config.md` — 配置参数（按需调整）
+- `naming.md` — 命名规范
+- `system.md` — 故事框架
+
+## 目录结构
+
+```
+template/
+├── state_db/              ← 填写：状态数据库
+│   ├── world_lore.json    ← 世界观规则
+│   ├── characters.json    ← 角色注册表
+│   └── plot_timeline.json ← 叙事记忆
+├── agents/                ← 不改：Agent 系统提示
+│   ├── writer.md
+│   ├── critic.md
+│   └── archivist.md
+├── worldview/             ← 填写：世界观设定
+│   └── master.md
+├── plot/                  ← 填写：情节大纲
+│   └── vol1/
+│       └── world/
+├── characters/            ← 填写：角色档案
+├── writing/               ← 不改：写作指南
+├── chapters/              ← 输出：正文
+└── summary/               ← 输出：章节摘要
+```
