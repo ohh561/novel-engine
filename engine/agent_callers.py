@@ -169,7 +169,9 @@ class ArchivistResult:
     new_characters: list
     timeline_entry: Optional[dict]
     foreshadowing_changes: list
-    raw_json: dict
+    combat_log: Optional[dict] = None
+    resource_changes: Optional[dict] = None
+    raw_json: dict = None
 
 
 # ---------------------------------------------------------------------------
@@ -367,7 +369,16 @@ ARCHIVIST_SYSTEM_PROMPT = """你是一个精确的档案管理员。你将收到
   "foreshadowing_changes": [
     { "id": "F005", "action": "new", "content": "新伏笔内容" }
   ],
-  "current_location": "新的当前位置（如有变化）"
+  "current_location": "新的当前位置（如有变化）",
+  "combat_log": {
+    "engagement": "交战描述（一句话）",
+    "earth_forces": { "deployed": "投入兵力", "casualties": "伤亡", "equipment_status": "装备状态" },
+    "enemy_forces": { "spotted": "已确认", "estimated": "预估" },
+    "outcome": "交战结果"
+  },
+  "resource_changes": {
+    "角色id": { "consumed": ["消耗项"], "gained": ["获得项"], "lost": ["丢失项"] }
+  }
 }"""
 
 
@@ -427,6 +438,8 @@ def call_archivist(final_text: str, current_characters: dict) -> ArchivistResult
         new_characters=data.get("new_characters", []),
         timeline_entry=data.get("timeline_entry"),
         foreshadowing_changes=data.get("foreshadowing_changes", []),
+        combat_log=data.get("combat_log"),
+        resource_changes=data.get("resource_changes"),
         raw_json=data,
     )
     print(f"  [archivist] 完成，{len(result.character_updates)} 个角色更新, "

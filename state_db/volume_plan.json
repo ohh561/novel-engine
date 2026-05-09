@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "卷级剧情节点计划。Rhythm Director 生成，Fractal Outliner 消费。",
+    "last_updated": "2026-05-09"
+  },
+  "current_volume": 1,
+  "volumes": {
+    "1": {
+      "volume_title": "初遇",
+      "total_chapters_estimate": 200,
+      "nodes": [
+        {
+          "node_id": "V1_N01",
+          "node_title": "屏障降临",
+          "event_description": "天空出现异象，半透明屏障包裹地球和另一个星球。陆辞用SpecScope分析信号，被CERN发现。",
+          "appeal_score": 7.0,
+          "chapter_budget": 15,
+          "expansion_status": "pending",
+          "narrative_function": "开篇+选中",
+          "hooks": ["天上多了个球", "全球唯一的匹配者"]
+        },
+        {
+          "node_id": "V1_N02",
+          "node_title": "穹顶与真相",
+          "event_description": "陆辞被接到穹顶基地，得知自己100%匹配，见苏薇和陈卫国。了解屏障溶解时间表。",
+          "appeal_score": 6.0,
+          "chapter_budget": 8,
+          "expansion_status": "pending",
+          "narrative_function": "信息揭示+决策",
+          "hooks": ["能不能拒绝", "屏障在溶解"]
+        },
+        {
+          "node_id": "V1_N03",
+          "node_title": "穿越异世界",
+          "event_description": "陆辞决定穿越屏障。训练、告别父母、发射、穿越。降落紫色森林。",
+          "appeal_score": 8.5,
+          "chapter_budget": 12,
+          "expansion_status": "pending",
+          "narrative_function": "核心卖点",
+          "hooks": ["第一次穿越的震撼", "异世界的陌生感"]
+        },
+        {
+          "node_id": "V1_N04",
+          "node_title": "异世界生存",
+          "event_description": "陆辞在艾尔德探索、生存、发现文明。用科技知识和分析能力适应异世界。",
+          "appeal_score": 8.0,
+          "chapter_budget": 25,
+          "expansion_status": "pending",
+          "narrative_function": "核心卖点展开",
+          "hooks": ["第一次接触魔法", "语言学习", "发现城镇"]
+        },
+        {
+          "node_id": "V1_N05",
+          "node_title": "混入魔法学院",
+          "event_description": "陆辞伪造身份进入王都，用化学知识引起注意，被允许进入魔法学院旁听。",
+          "appeal_score": 7.5,
+          "chapter_budget": 20,
+          "expansion_status": "pending",
+          "narrative_function": "谍战+社交",
+          "hooks": ["身份暴露的风险", "科学vs魔法的碰撞"]
+        },
+        {
+          "node_id": "V1_N06",
+          "node_title": "遇见艾拉",
+          "event_description": "陆辞在魔法学院遇到艾拉。她聪明、好奇、对外面的世界充满向往。两人产生联系。",
+          "appeal_score": 8.0,
+          "chapter_budget": 15,
+          "expansion_status": "pending",
+          "narrative_function": "感情线启动",
+          "hooks": ["她会发现他的秘密吗", "两个世界的碰撞"]
+        },
+        {
+          "node_id": "V1_N07",
+          "node_title": "深入情报",
+          "event_description": "陆辞逐渐接近权力核心，用无人机绘制地图，潜入骑士团训练场，发现龙族存在。",
+          "appeal_score": 8.5,
+          "chapter_budget": 25,
+          "expansion_status": "pending",
+          "narrative_function": "谍战+探索",
+          "hooks": ["龙族的震撼", "身份差点暴露"]
+        },
+        {
+          "node_id": "V1_N08",
+          "node_title": "撤离",
+          "event_description": "陆辞决定返回地球。和艾拉告别，她给他护身符。穿越屏障回去。",
+          "appeal_score": 7.0,
+          "chapter_budget": 8,
+          "expansion_status": "pending",
+          "narrative_function": "情感高潮+过渡",
+          "hooks": ["艾拉的护身符", "他能回来吗"]
+        },
+        {
+          "node_id": "V1_N09",
+          "node_title": "全面战争",
+          "event_description": "屏障溶解，两个世界物理接触。地球军队登陆异世界。陆辞带领军队凭借情报优势作战。",
+          "appeal_score": 9.5,
+          "chapter_budget": 60,
+          "expansion_status": "pending",
+          "narrative_function": "大高潮",
+          "hooks": ["科技vs魔法的大规模战争", "龙族参战", "精灵的立场"]
+        },
+        {
+          "node_id": "V1_N10",
+          "node_title": "代价",
+          "event_description": "魔法世界投降。卫星大陆漂移。陆辞赢了战争，但看到艾拉的眼神——'原来你就是来毁灭我们的。'",
+          "appeal_score": 8.0,
+          "chapter_budget": 10,
+          "expansion_status": "pending",
+          "narrative_function": "情感炸弹+收尾",
+          "hooks": ["赢了但失去了", "第二个世界显现"]
+        }
+      ]
+    }
+  }
+}

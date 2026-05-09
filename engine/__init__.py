@@ -10,8 +10,9 @@ Novel Engine v5.0 — 动态有状态多 Agent 写作系统
 from engine.main_orchestrator import generate_chapter
 from engine.state_manager import build_context, apply_state_updates
 from engine.agent_callers import call_writer, call_critic, call_archivist
+from engine.macro_director import plan_volume, expand_node, generate_volume, get_next_pending_node
 
-__version__ = "5.0.0"
+__version__ = "5.1.0"
 __all__ = [
     "generate_chapter",
     "build_context",
@@ -19,4 +20,8 @@ __all__ = [
     "call_writer",
     "call_critic",
     "call_archivist",
+    "plan_volume",
+    "expand_node",
+    "generate_volume",
+    "get_next_pending_node",
 ]

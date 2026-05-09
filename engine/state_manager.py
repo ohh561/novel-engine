@@ -410,6 +410,22 @@ def apply_state_updates(updates: dict) -> None:
         plot_data["foreshadowing"] = foreshadows
         save_plot_timeline(plot_data)
 
+    # 追加战斗日志
+    combat_log = updates.get("combat_log")
+    if combat_log:
+        plot_data = load_plot_timeline()
+        plot_data.setdefault("combat_logs", []).append(combat_log)
+        save_plot_timeline(plot_data)
+
+    # 追加资源变更记录
+    resource_changes = updates.get("resource_changes")
+    if resource_changes:
+        plot_data = load_plot_timeline()
+        chapter_num = updates.get("timeline_entry", {}).get("chapter", 0)
+        change_record = {"chapter": chapter_num, "changes": resource_changes}
+        plot_data.setdefault("resource_log", []).append(change_record)
+        save_plot_timeline(plot_data)
+
     print("  [state] 状态更新完成")
 
 
