@@ -1,11 +1,13 @@
-# 小说内容（不在引擎仓库中）
+# 废弃目录（保留于仓库但不在新系统中使用）
 bible/
 outline/
 characters/
 state/
 summary/
-chapters/
-story-state.md
+writing-guide.md
+
+# 系统文件
+system.md
 
 # 临时文件
 *.bak
@@ -21,3 +23,5 @@ Thumbs.db
 .vscode/
 .idea/
 *.code-workspace
+__pycache__/
+*.pyc

@@ -7,9 +7,9 @@
       "id": "唯一标识",
       "name": "姓名",
       "faction": "阵营",
-      "current_status": { "health", "location", "wealth", "equipment", "mood" },
+      "current_status": ["health", "location", "wealth", "equipment", "mood"],
       "active_goals": ["当前目标"],
-      "relationships": { "char_id": { "type", "trust", "affinity", "note" } },
+      "relationships": ["type", "trust", "affinity", "note"],
       "hidden_secrets": ["读者不知道的信息"],
       "last_appeared": "最后出场章节",
       "arc_stage": "人物弧线阶段"
