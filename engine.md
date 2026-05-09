@@ -1,129 +1,89 @@
-# 小说写作引擎 v3.1
+# 小说写作引擎 v4.0
 
-> 本系统是一个完整的长篇小说写作引擎，可以独立驱动一部500+章的长篇小说。
-> 各模块互相协作，随剧情发展自动丰富，实时监控主线进展。
-
----
-
-## 引擎架构
-
-```
-┌─────────────────────────────────────────────────┐
-│                  调度层                           │
-│  engine.md + naming.md + index.md               │
-└─────────┬───────────────────────────────┬───────┘
-          │                               │
-    ┌─────▼──────┐                 ┌──────▼──────┐
-    │  故事层     │                 │  写作层      │
-    │            │                 │             │
-    │ worldview   │                 │ guide       │
-    │ plot        │◄───────────────►│ critic      │
-    │ persistent  │    双向协作     │ update-list │
-    │ characters  │                 │             │
-    │ reader-journey               │             │
-    │ monitor     │                 │             │
-    │ dashboard   │                 │             │
-    └────────────┘                 └─────────────┘
-          │
-    ┌─────▼──────┐
-    │  模板层     │
-    │ template/   │ ← 可复用，新建小说时复制
-    └────────────┘
-```
-
-## 模块清单
-
-| 模块 | 文件 | 职责 | 状态 |
-|------|------|------|------|
-| 引擎 | engine.md | 调度、协作规则 | ✅ |
-| 命名规范 | naming.md | 统一命名 | ✅ |
-| 全局索引 | persistent/index.md | 所有ID注册表 | ✅ |
-| 世界观 | worldview/master.md | 顶层规则 | ✅ |
-| 情节 | plot/volX/ | 故事梗概+节拍 | ✅ 五卷 |
-| 伏笔 | persistent/foreshadow.md | 三级伏笔 | ✅ |
-| 时间线 | persistent/timeline.md | 双时间轴 | ✅ |
-| 主角 | persistent/characters/protagonist.md | 当前状态+历史 | ✅ |
-| 角色库 | persistent/characters/cast.md | 角色画像+关系矩阵 | ✅ |
-| 读者旅程 | persistent/reader-journey.md | 情绪+子线+节奏 | ✅ |
-| 主线监控 | persistent/monitor.md | 主线进展+预警 | ✅ |
-| 仪表盘 | persistent/dashboard.md | 健康检查总览 | ✅ |
-| 写作指南 | writing/guide.md | 场景/钩子/去AI味 | ✅ |
-| 自审 | writing/critic.md | 逻辑/节奏/人物检查 | ✅ |
-| 更新清单 | writing/update-checklist.md | 每章更新+依赖+故障恢复 | ✅ |
-| 模板 | template/ | 冷启动模板 | ✅ |
-
-## 数据源规则（解决冗余问题）
-
-| 数据类型 | 主数据源 | 副本 | 同步规则 |
-|---------|---------|------|---------|
-| 主角当前状态 | protagonist.md 顶部 | dashboard.md | 改主角→同步dashboard |
-| 主角历史 | protagonist.md 底部 | 无 | 只在主角档案改 |
-| 配角信息 | cast.md | 幕文件节拍 | 改cast→检查幕文件 |
-| 伏笔 | foreshadow.md | 幕文件伏笔字段 | 改foreshadow→检查幕文件 |
-| 时间线 | timeline.md | 幕文件时间字段 | 改timeline→检查幕文件 |
-| 关系 | protagonist关系表+cast关系矩阵 | 无 | 改关系→同步两处 |
-| 所有ID | index.md | 各自文件 | 新增ID→必须登记index |
-
-## 写作引擎运行流程
-
-```
-1. 生成上下文包
-   ├─ 读：当前节拍（plot/volX/actN.md）
-   ├─ 读：世界设定（plot/volX/world/）
-   ├─ 读：persistent/ 所有文件
-   └─ 读：writing/guide.md
-
-2. 写正文
-   └─ 按写作指南执行
-
-3. 自审（writing/critic.md）
-   └─ 发现问题 → 纠正 → 重新自审
-
-4. 更新文档（按 writing/update-checklist.md 顺序）
-   ├─ timeline.md
-   ├─ protagonist.md
-   ├─ cast.md
-   ├─ foreshadow.md
-   ├─ index.md
-   ├─ monitor.md
-   ├─ reader-journey.md
-   └─ dashboard.md
-
-5. 主线监控（monitor.md）
-   └─ 偏差 → 调整后续节拍
-
-6. 读者旅程检查（reader-journey.md）
-   └─ 断线/失衡 → 调整节奏
-
-7. 保存正文
-   └─ chapters/vol1-chXXX.md
-```
-
-## 模块协作矩阵
-
-| 变化来源 | 必须检查 | 必须更新 |
-|---------|---------|---------|
-| plot推进 | monitor, reader-journey, foreshadow | timeline, protagonist, dashboard |
-| 角色变化 | cast关系, plot后续 | protagonist, cast, dashboard |
-| 伏笔回收 | plot节拍 | foreshadow, index, dashboard |
-| 时间变化 | plot逻辑 | timeline |
-| critic问题 | 所有受影响 | 对应模块 |
-| monitor偏离 | plot当前幕 | plot, monitor |
-| reader失衡 | plot后续 | plot, reader-journey |
-
-## 自我丰富规则
-
-| 触发事件 | 丰富什么 |
-|---------|---------|
-| 新角色出场 | cast.md + index.md |
-| 角色关系变化 | protagonist关系表 + cast关系矩阵 |
-| 新技能 | protagonist技能树 |
-| 新物品 | protagonist携带物品 |
-| 新伏笔 | foreshadow.md + index.md |
-| 子线推进 | reader-journey子线表 |
-| 节奏变化 | reader-journey热力图 |
-| 主线推进 | monitor节点状态 |
+> 为写好看的故事而设计，不是为填表而设计。
 
 ---
 
-*版本：v3.1*
+## 设计原则
+
+1. **故事好看是唯一目标** — 不是流程正确、不是文件齐全
+2. **最少文件，最高信号** — 每个文件都有明确用途，没有冗余
+3. **给 AI 自由空间** — 指引方向，不限制即兴发挥
+4. **态度 > 技巧** — 有观点、有偏见、有情绪的文章才有味道
+
+---
+
+## 文件结构
+
+```
+novel/
+├── engine.md              ← 本文件（总纲）
+├── system.md              ← 故事框架（金字塔结构）
+├── config.md              ← 可调参数
+├── naming.md              ← 命名规范
+├── story-state.md         ← 唯一的状态追踪文件
+├── worldview/             ← 世界观设定
+├── plot/                  ← 情节大纲（卷→幕→节拍）
+├── characters/            ← 角色档案
+├── writing/
+│   ├── guide.md           ← 写作指南（核心）
+│   └── critic.md          ← 自审清单
+├── chapters/              ← 正文
+└── template/              ← 冷启动模板
+```
+
+**已删除的文件：**
+- ~~persistent/dashboard.md~~ → 合并入 story-state.md
+- ~~persistent/monitor.md~~ → 合并入 story-state.md
+- ~~persistent/reader-journey.md~~ → 合并入 story-state.md
+- ~~persistent/index.md~~ → 不需要全局索引
+- ~~persistent/timeline.md~~ → 合并入 story-state.md
+- ~~writing/update-checklist.md~~ → 流程太重，砍掉
+- ~~writing/quality.md~~ → 合并入 critic.md
+- ~~writing/revision.md~~ → 简化，不需要单独文件
+
+---
+
+## 写一章的流程
+
+### 写之前（2分钟）
+
+1. 读 `story-state.md` — 知道"现在到哪了"
+2. 读最近 1 章原文 — 知道"上一章什么感觉"
+3. 看大纲里这一段的节拍方向 — 知道"这章该往哪走"
+
+### 写
+
+- 按方向写，不用管"有没有按场景-续接模型"
+- 允许即兴发挥 — 好东西常常是写到一半冒出来的
+- 不追求完美 — 初稿的任务是"有故事"，不是"好故事"
+
+### 写完（2分钟）
+
+1. 更新 `story-state.md`
+2. 完了
+
+---
+
+## 模块协作（简化版）
+
+```
+大纲（方向）
+  ↓
+story-state.md（当前状态）
+  ↓
+写作指南（怎么写好看）
+  ↓
+正文
+  ↓
+自审（快速检查）
+  ↓
+更新 story-state.md
+```
+
+没有仪表盘、没有监控、没有读者旅程、没有全局索引。
+**只有三件事：知道方向、写好故事、记住发生了什么。**
+
+---
+
+*版本：v4.0*

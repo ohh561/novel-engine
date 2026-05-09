@@ -1,5 +1,31 @@
 # Changelog
 
+## v4.0 (2026-05-09)
+
+### 重构：轻量化，聚焦写作质量
+
+**核心理念变化**：从"追踪一切"转向"写好故事"。砍掉冗余的监控/仪表盘/索引系统，把注意力放回怎么把每一章写好看。
+
+### Added
+- `system.md` — 故事框架（情节节拍+章节切分+伏笔规则）
+- `writing/guide.md` v4.0 — 完全重写，聚焦去AI味、节奏变化、情感共鸣、角色声音
+- 模板目录新增 `characters/`、`plot/vol1/world/`、`writing/` 空结构
+
+### Removed
+- `persistent/` 目录（dashboard/foreshadow/index/monitor/reader-journey/timeline）— 过度追踪，实际写作中用不上
+- `writing/quality.md` — 内容合并入 guide.md
+- `writing/revision.md` — 流程过度复杂化
+- `writing/update-checklist.md` — 过度追踪，用 story-state.md 替代
+- 模板中的 `persistent/` 目录
+
+### Changed
+- `engine.md` — 简化模块协作规则
+- `config.md` — 精简配置
+- `writing/critic.md` — 精简自检清单
+- `writing/annotated-example.md` — 更新示例
+- `template/README.md` — 更新模板说明
+- `worldview/master.md` — 更新格式
+
 ## v3.1 (2026-05-08)
 
 ### Added

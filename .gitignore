@@ -6,8 +6,7 @@ state/
 summary/
 writing-guide.md
 
-# 系统文件
-system.md
+# system.md is now a core file
 
 # 临时文件
 *.bak
